@@ -1,0 +1,144 @@
+﻿<Window x:Class="ControllerNode.View.ComputeNodeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:ControllerNode.View"
+        mc:Ignorable="d"
+        Title="" Height="247.66" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" ShowInTaskbar="False">
+    <Border Width="auto" Height="auto" BorderBrush="{DynamicResource DictBorderBrush}" BorderThickness="1"
+                CornerRadius="5" Background="White">
+        <StackPanel>
+            <StackPanel Background="#59676b" Width="auto" Height="60">
+                <TextBlock VerticalAlignment="Center" Margin="0, 20, 0, 0" HorizontalAlignment="Center" Foreground="White" FontSize="16">Добавить новый вычислительный узел</TextBlock>
+            </StackPanel>
+            <Grid Margin="5, 20, 5, 0" Height="141">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Grid.Row="0" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right">IP - адрес:</TextBlock>
+                <Grid Grid.Column="1" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="firstIpPart" Grid.Column="0" Grid.Row="0" Margin="5" MaxLength="3" Text="{Binding FirstIpPart}"> 
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding NumbValidateCommand}"
+                                        CommandParameter="{Binding ElementName=firstIpPart}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0, 10, 10, 10" IsHitTestVisible="False" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=firstIpPart}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Grid.Column="1" Grid.Row="0" FontSize="15" VerticalAlignment="Center">.</TextBlock>
+
+                    <TextBox x:Name="secondIpPart" Grid.Column="2" Grid.Row="0" Margin="5" MaxLength="3" Text="{Binding SecondIpPart}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding NumbValidateCommand}"
+                                        CommandParameter="{Binding ElementName=secondIpPart}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Grid.Column="2" Grid.Row="0" Margin="0, 10, 10, 10" IsHitTestVisible="False" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=secondIpPart}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Grid.Column="3" Grid.Row="0" FontSize="15" VerticalAlignment="Center">.</TextBlock>
+
+                    <TextBox x:Name="thirdIpPart" Grid.Column="4" Grid.Row="0" Margin="5" MaxLength="3" Text="{Binding ThirdIpPart}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding NumbValidateCommand}"
+                                        CommandParameter="{Binding ElementName=thirdIpPart}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Grid.Column="4" Grid.Row="0" Margin="0, 10, 10, 10" IsHitTestVisible="False" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=thirdIpPart}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Grid.Column="5" Grid.Row="0" FontSize="15" VerticalAlignment="Center">.</TextBlock>
+
+                    <TextBox x:Name="fourthIpPart" Grid.Column="6" Grid.Row="0" Margin="5" MaxLength="3" Text="{Binding FourthIpPart}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <i:InvokeCommandAction 
+                                        Command="{Binding NumbValidateCommand}"
+                                        CommandParameter="{Binding ElementName=fourthIpPart}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Grid.Column="6" Grid.Row="0" Margin="0, 10, 10, 10" IsHitTestVisible="False" TextWrapping="Wrap" Text="255" VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=fourthIpPart}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0, 10, 0, 0" >Протокол:</TextBlock>
+                <ComboBox Grid.Column="1" Grid.Row="1" Width="100" HorizontalAlignment="Left" Margin="5, 10, 0, 0" 
+                          DisplayMemberPath="Name" ItemsSource="{Binding Protocols}" SelectedItem="{Binding SelectedProtocol}" />
+
+                <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0, 20, 10, 0">
+                    <Button x:Name="okBtn" Width="80" Height="25" IsDefault="True" Click="OkBtn_Click">Ок</Button>
+                    <Button x:Name="cancelBtn" Width="80" Height="25" Margin="10, 0, 0, 0" IsCancel="True" Click="CancelBtn_Click">Отмена</Button>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Border>
+</Window>

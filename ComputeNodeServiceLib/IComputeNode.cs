@@ -12,5 +12,8 @@ namespace ComputeNodeServiceLib
     {
         [OperationContract]
         bool IsWorking();
+
+        [OperationContract]
+        RestorePasswordResult RestorePassword(string passwordHash, char[] startSymbolsRange);
     }
 }

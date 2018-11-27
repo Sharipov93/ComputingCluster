@@ -30,5 +30,27 @@ namespace ControllerNode.Model
                 NotifyPropertyChanged("Name");
             }
         }
+
+        private string protValue;
+        public string ProtValue
+        {
+            get { return protValue; }
+            set
+            {
+                protValue = value;
+                NotifyPropertyChanged("ProtValue");
+            }
+        }
+
+        private int port;
+        public int Port
+        {
+            get { return port; }
+            set
+            {
+                port = value;
+                NotifyPropertyChanged("Port");
+            }
+        }
     }
 }

@@ -30,6 +30,17 @@ namespace ControllerNode.Model
             }
         }
 
+        private string url;
+        public string Url
+        {
+            get { return url; }
+            set
+            {
+                url = value;
+                NotifyPropertyChanged("Url");
+            }
+        }
+
         private Protocol protocol;
         public Protocol Protocol
         {
@@ -38,6 +49,17 @@ namespace ControllerNode.Model
             {
                 protocol = value;
                 NotifyPropertyChanged("Protocol");
+            }
+        }
+
+        private DateTime connectionDate;
+        public DateTime ConnectionDate
+        {
+            get { return connectionDate; }
+            set
+            {
+                connectionDate = value;
+                NotifyPropertyChanged("ConnectionDate");
             }
         }
     }

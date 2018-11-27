@@ -45,6 +45,7 @@
     <Compile Include="ComputeNodeService.cs" />
     <Compile Include="IComputeNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RestorePasswordResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

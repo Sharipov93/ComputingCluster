@@ -31,6 +31,7 @@ namespace TestClientProject
                     Console.WriteLine(e.InnerException?.Message);
                 }
             }
+
             Console.ReadLine();
         }
     }
