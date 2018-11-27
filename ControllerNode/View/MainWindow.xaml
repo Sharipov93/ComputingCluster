@@ -1,0 +1,94 @@
+﻿<Window x:Class="ControllerNode.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ControllerNode"
+        mc:Ignorable="d"
+        Title="Вычислительный кластер" WindowState="Maximized" Closing="Window_Closing" Closed="Window_Closed">
+    <DockPanel LastChildFill="True">
+        <DockPanel DockPanel.Dock="Left" MinWidth="320" MaxWidth="320" Margin="20, 10, 20, 20" >
+            <Grid DockPanel.Dock="Bottom" VerticalAlignment="Top" Margin="5, 10, 5, 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Image Source="pack://application:,,,/images/password.png" MaxHeight="26" Grid.Row="0" Grid.Column="0" MaxWidth="26" HorizontalAlignment="Right" VerticalAlignment="Top" ToolTip="Пароль"/>
+                <PasswordBox x:Name="passwordBox" Grid.Column="1" Grid.Row="0" Margin="5, 0, 0, 10" MaxLength="6" />
+                <TextBlock Grid.Column="1" Grid.Row="0" Margin="0, 0, 10, 10" x:Name="Placeholder" IsHitTestVisible="False" TextWrapping="Wrap" Text="Введите пароль..." VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Right">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Password, ElementName=passwordBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <Image Source="pack://application:,,,/images/h.png" MaxHeight="26" Grid.Row="1" Grid.Column="0" MaxWidth="26" HorizontalAlignment="Right" VerticalAlignment="Top" ToolTip="Хэш-код пароля"/>
+                <TextBox Grid.Column="1" Grid.Row="1" IsReadOnly="True" Margin="5, 0, 0, 10"/>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right">
+                    <Button Margin="0, 10, 0, 0" Padding="3" IsEnabled="{Binding StartComputeBtnEnabled}">Запустить</Button>
+                    <Button Margin="5, 10, 0, 0" Padding="3" IsEnabled="{Binding CancelComputeBtnEnabled}">Отменить</Button>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel DockPanel.Dock="Top" Background="#59676b" Margin="5, 0, 5, 0">
+                <TextBlock Foreground="White" FontSize="14" Padding="5">Вычислительные узлы:</TextBlock>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" Margin="0, 0, 5, 5" HorizontalAlignment="Right">
+                <Button Margin="0" Padding="3" IsEnabled="{Binding AddNodeBtnEnabled}">Добавить узел</Button>
+                <Button Margin="5, 0, 0, 0" Padding="3" IsEnabled="{Binding RemoveNodeBtnEnabled}">Удалить узел</Button>
+            </StackPanel>
+            
+            <ListView Margin="5">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn Header="№" Width="35"></GridViewColumn>
+                            <GridViewColumn Header="ip - адрес" Width="200"></GridViewColumn>
+                            <GridViewColumn Header="протокол" Width="70"></GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+        </DockPanel>
+
+        <GroupBox Margin="10, 10, 20, 20">
+            <GroupBox.Header>
+                <TextBlock FontSize="14" Foreground="White">Консоль:</TextBlock>
+            </GroupBox.Header>
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="White">
+                    <TextBlock Margin="10, 5, 10, 5">
+                        <Run FontSize="14" Foreground="#c40101" FontWeight="Bold">Инструкция для работы с приложением:</Run>
+                        <LineBreak /><LineBreak />
+                        <Run FontSize="13" Foreground="#c40101" Text="{Binding UseInformationLog}" />
+                        <LineBreak /><LineBreak />
+                        <Run FontSize="14" Foreground="#3b774a" FontWeight="Bold">Подключенные вычислительные узлы:</Run>
+                        <LineBreak /><LineBreak />
+                        <Run FontSize="13" Foreground="#3b774a" Text="{Binding NodesInformationLog}" />
+                        <LineBreak /><LineBreak />
+                        <Underline Foreground="Black">
+                            <Run FontSize="14" Foreground="Black" FontWeight="Bold">Результат работы программы:</Run>
+                        </Underline>
+                        <LineBreak /><LineBreak />
+                        <Run FontSize="13" Foreground="Black" Text="{Binding ResultInformationlog}" />
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+    </DockPanel>
+</Window>
