@@ -21,7 +21,7 @@
                 </Grid.ColumnDefinitions> 
 
                 <Image Source="pack://application:,,,/images/password.png" MaxHeight="26" Grid.Row="0" Grid.Column="0" MaxWidth="26" HorizontalAlignment="Right" VerticalAlignment="Top" ToolTip="Пароль"/>
-                <TextBox x:Name="passwordBox" Grid.Column="1" Grid.Row="0" Margin="5, 0, 0, 10" MaxLength="4" Text="{Binding Password}">
+                <TextBox x:Name="passwordBox" Grid.Column="1" Grid.Row="0" Margin="5, 0, 0, 10" MaxLength="6" Text="{Binding Password}">
                 </TextBox>
                 <TextBlock Grid.Column="1" Grid.Row="0" Margin="13, 0, 0, 10" x:Name="Placeholder" IsHitTestVisible="False" TextWrapping="Wrap" Text="Введите пароль..." VerticalAlignment="Center" Foreground="DarkGray" HorizontalAlignment="Left">
                     <TextBlock.Style>
@@ -83,7 +83,7 @@
 
         <StackPanel DockPanel.Dock="Top" Margin="10, 10, 20, 0" Background="#59676b">
             <TextBlock FontSize="14" Foreground="White" Margin="5">
-                <Run>Общее время процесса(сек): </Run>
+                <Run>Общее время процесса(секунд): </Run>
                 <Run Text="{Binding AllProcessTime}" />
             </TextBlock>
         </StackPanel>
@@ -110,6 +110,12 @@
                         <Run FontSize="13" Foreground="DarkGray" Text="{Binding ResultInformationlog}" />
                         <LineBreak /><LineBreak />
                         <Run FontSize="13" Foreground="#ce6d06" Text="{Binding NodeComputeOutput}" />
+                        <LineBreak /><LineBreak />
+                        <Run FontSize="14" Foreground="#3b774a">Время вычислений всех узлов: </Run>
+                        <Run FontSize="14" Foreground="#3b774a" Text="{Binding AllNodeTime}"></Run>
+                        <LineBreak />
+                        <Run FontSize="14" Foreground="#3b774a">Количество вычислений всех узлов: </Run>
+                        <Run FontSize="14" Foreground="#3b774a" Text="{Binding AllNodeKeys}"></Run>
                     </TextBlock>
                 </StackPanel>
             </ScrollViewer>

@@ -49,6 +49,18 @@
   <wsdl:message name="IComputeNode_RestorePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:RestorePasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="IComputeNode_GetComputeInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetComputeInformation" />
+  </wsdl:message>
+  <wsdl:message name="IComputeNode_GetComputeInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetComputeInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IComputeNode_StopPasswordComputing_InputMessage">
+    <wsdl:part name="parameters" element="tns:StopPasswordComputing" />
+  </wsdl:message>
+  <wsdl:message name="IComputeNode_StopPasswordComputing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StopPasswordComputingResponse" />
+  </wsdl:message>
   <wsdl:portType name="IComputeNode">
     <wsdl:operation name="IsWorking">
       <wsdl:input wsaw:Action="http://tempuri.org/IComputeNode/IsWorking" message="tns:IComputeNode_IsWorking_InputMessage" />
@@ -57,6 +69,14 @@
     <wsdl:operation name="RestorePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IComputeNode/RestorePassword" message="tns:IComputeNode_RestorePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IComputeNode/RestorePasswordResponse" message="tns:IComputeNode_RestorePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetComputeInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IComputeNode/GetComputeInformation" message="tns:IComputeNode_GetComputeInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IComputeNode/GetComputeInformationResponse" message="tns:IComputeNode_GetComputeInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StopPasswordComputing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IComputeNode/StopPasswordComputing" message="tns:IComputeNode_StopPasswordComputing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IComputeNode/StopPasswordComputingResponse" message="tns:IComputeNode_StopPasswordComputing_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IComputeNode" type="tns:IComputeNode">
@@ -79,6 +99,24 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetComputeInformation">
+      <soap:operation soapAction="http://tempuri.org/IComputeNode/GetComputeInformation" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopPasswordComputing">
+      <soap:operation soapAction="http://tempuri.org/IComputeNode/StopPasswordComputing" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="NetTcpBinding_IComputeNode" type="tns:IComputeNode">
     <wsp:PolicyReference URI="#NetTcpBinding_IComputeNode_policy" />
@@ -94,6 +132,24 @@
     </wsdl:operation>
     <wsdl:operation name="RestorePassword">
       <soap12:operation soapAction="http://tempuri.org/IComputeNode/RestorePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetComputeInformation">
+      <soap12:operation soapAction="http://tempuri.org/IComputeNode/GetComputeInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="StopPasswordComputing">
+      <soap12:operation soapAction="http://tempuri.org/IComputeNode/StopPasswordComputing" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

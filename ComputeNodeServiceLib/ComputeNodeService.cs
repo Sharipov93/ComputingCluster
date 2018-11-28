@@ -10,17 +10,22 @@ namespace ComputeNodeServiceLib
 {
     public class ComputeNodeService : IComputeNode
     {
+        // проверка работы коммуникационного узла
         public bool IsWorking() => true;
-
+        
         // хэш пароля, высылаемый службе и результат найденного пароля
         private string hash, resultPassword;
 
+        // Время начала подбара на узле
+        private static DateTime startTime;
+
         // флаг показывающай найден ли пароль
-        private bool isMatched = false;
+        private static bool isMatched = false;
+        private bool passwordFinded = false;
 
         // Длина массива startSymbolsRange для повышения производительности
         private int startSymbolsRangeLength = 0;
-        private long computedKeys = 0;
+        private static long computedKeys;
 
         // Пересылаемый массив содержаищий символы, по которым будет подбираться пароль
         private char[] charactersToRestorePass;
@@ -33,8 +38,11 @@ namespace ComputeNodeServiceLib
         /// <param name="startSymbolsRange">стартовый массив символов</param>
         public RestorePasswordResult RestorePassword(string passwordHash, char[] startSymbolsRange)
         {
+            isMatched = false;
+
             // Время начала подбора пароля в м/сек
-            DateTime startTime = DateTime.Now;
+            startTime = DateTime.Now;
+            computedKeys = 0;
 
             hash = passwordHash;
             charactersToRestorePass = startSymbolsRange;
@@ -56,7 +64,7 @@ namespace ComputeNodeServiceLib
                 OperationCount = computedKeys,
                 OperationsLeadTime = (DateTime.Now - startTime).Milliseconds,
                 PasswordHash = passwordHash,
-                PasswordIsRestored = isMatched,
+                PasswordIsRestored = passwordFinded,
                 RestorePassword = resultPassword
             };
         }
@@ -101,6 +109,8 @@ namespace ComputeNodeServiceLib
             // Перебираем через весь наш массив стартовых символов charactersToRestorePass
             for (int i = 0; i < startSymbolsRangeLength; i++)
             {
+                if (isMatched) return;
+
                 /* Сивмол в currentCharPosition будет заменен новым символом
                  * из charactersToRestorePass массива => будет создана новая комбинация ключа */
                 keyChars[currentCharPosition] = charactersToRestorePass[i];
@@ -124,9 +134,10 @@ namespace ComputeNodeServiceLib
                      */
                     if (hashString == hash)
                     {
-                        if (!isMatched)
+                        if (!passwordFinded)
                         {
                             isMatched = true;
+                            passwordFinded = true;
                             resultPassword = genPass;
                         }
                         return;
@@ -158,6 +169,18 @@ namespace ComputeNodeServiceLib
             }
 
             return passwordHash;
+        }
+
+        public bool StopPasswordComputing() => isMatched = true;
+
+
+        public RestorePasswordResult GetComputeInformation()
+        {
+            return new RestorePasswordResult
+            {
+                OperationCount = computedKeys,
+                OperationsLeadTime = (DateTime.Now - startTime).Milliseconds
+            };
         }
     }
 }
