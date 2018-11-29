@@ -7,6 +7,9 @@ using System.Windows.Input;
 
 namespace ControllerNode.ViewModel
 {
+    /// <summary>
+    /// Класс для комманд контроллера
+    /// </summary>
     public class ControllerCommand : ICommand
     {
         private readonly Action<object> execute;

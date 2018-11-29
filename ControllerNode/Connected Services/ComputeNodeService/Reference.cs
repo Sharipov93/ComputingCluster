@@ -31,14 +31,6 @@ namespace ControllerNode.ComputeNodeService {
         
         ComputeNodeServiceLib.RestorePasswordResult EndRestorePassword(System.IAsyncResult result);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IComputeNode/GetComputeInformation", ReplyAction="http://tempuri.org/IComputeNode/GetComputeInformationResponse")]
-        ComputeNodeServiceLib.RestorePasswordResult GetComputeInformation();
-        
-        [System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/IComputeNode/GetComputeInformation", ReplyAction="http://tempuri.org/IComputeNode/GetComputeInformationResponse")]
-        System.IAsyncResult BeginGetComputeInformation(System.AsyncCallback callback, object asyncState);
-        
-        ComputeNodeServiceLib.RestorePasswordResult EndGetComputeInformation(System.IAsyncResult result);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IComputeNode/StopPasswordComputing", ReplyAction="http://tempuri.org/IComputeNode/StopPasswordComputingResponse")]
         bool StopPasswordComputing();
         
@@ -92,25 +84,6 @@ namespace ControllerNode.ComputeNodeService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class GetComputeInformationCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-        
-        private object[] results;
-        
-        public GetComputeInformationCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-                base(exception, cancelled, userState) {
-            this.results = results;
-        }
-        
-        public ComputeNodeServiceLib.RestorePasswordResult Result {
-            get {
-                base.RaiseExceptionIfNecessary();
-                return ((ComputeNodeServiceLib.RestorePasswordResult)(this.results[0]));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     public partial class StopPasswordComputingCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
         
         private object[] results;
@@ -144,12 +117,6 @@ namespace ControllerNode.ComputeNodeService {
         
         private System.Threading.SendOrPostCallback onRestorePasswordCompletedDelegate;
         
-        private BeginOperationDelegate onBeginGetComputeInformationDelegate;
-        
-        private EndOperationDelegate onEndGetComputeInformationDelegate;
-        
-        private System.Threading.SendOrPostCallback onGetComputeInformationCompletedDelegate;
-        
         private BeginOperationDelegate onBeginStopPasswordComputingDelegate;
         
         private EndOperationDelegate onEndStopPasswordComputingDelegate;
@@ -178,8 +145,6 @@ namespace ControllerNode.ComputeNodeService {
         public event System.EventHandler<IsWorkingCompletedEventArgs> IsWorkingCompleted;
         
         public event System.EventHandler<RestorePasswordCompletedEventArgs> RestorePasswordCompleted;
-        
-        public event System.EventHandler<GetComputeInformationCompletedEventArgs> GetComputeInformationCompleted;
         
         public event System.EventHandler<StopPasswordComputingCompletedEventArgs> StopPasswordComputingCompleted;
         
@@ -281,54 +246,6 @@ namespace ControllerNode.ComputeNodeService {
             base.InvokeAsync(this.onBeginRestorePasswordDelegate, new object[] {
                         passwordHash,
                         startSymbolsRange}, this.onEndRestorePasswordDelegate, this.onRestorePasswordCompletedDelegate, userState);
-        }
-        
-        public ComputeNodeServiceLib.RestorePasswordResult GetComputeInformation() {
-            return base.Channel.GetComputeInformation();
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public System.IAsyncResult BeginGetComputeInformation(System.AsyncCallback callback, object asyncState) {
-            return base.Channel.BeginGetComputeInformation(callback, asyncState);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        public ComputeNodeServiceLib.RestorePasswordResult EndGetComputeInformation(System.IAsyncResult result) {
-            return base.Channel.EndGetComputeInformation(result);
-        }
-        
-        private System.IAsyncResult OnBeginGetComputeInformation(object[] inValues, System.AsyncCallback callback, object asyncState) {
-            return this.BeginGetComputeInformation(callback, asyncState);
-        }
-        
-        private object[] OnEndGetComputeInformation(System.IAsyncResult result) {
-            ComputeNodeServiceLib.RestorePasswordResult retVal = this.EndGetComputeInformation(result);
-            return new object[] {
-                    retVal};
-        }
-        
-        private void OnGetComputeInformationCompleted(object state) {
-            if ((this.GetComputeInformationCompleted != null)) {
-                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
-                this.GetComputeInformationCompleted(this, new GetComputeInformationCompletedEventArgs(e.Results, e.Error, e.Cancelled, e.UserState));
-            }
-        }
-        
-        public void GetComputeInformationAsync() {
-            this.GetComputeInformationAsync(null);
-        }
-        
-        public void GetComputeInformationAsync(object userState) {
-            if ((this.onBeginGetComputeInformationDelegate == null)) {
-                this.onBeginGetComputeInformationDelegate = new BeginOperationDelegate(this.OnBeginGetComputeInformation);
-            }
-            if ((this.onEndGetComputeInformationDelegate == null)) {
-                this.onEndGetComputeInformationDelegate = new EndOperationDelegate(this.OnEndGetComputeInformation);
-            }
-            if ((this.onGetComputeInformationCompletedDelegate == null)) {
-                this.onGetComputeInformationCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnGetComputeInformationCompleted);
-            }
-            base.InvokeAsync(this.onBeginGetComputeInformationDelegate, null, this.onEndGetComputeInformationDelegate, this.onGetComputeInformationCompletedDelegate, userState);
         }
         
         public bool StopPasswordComputing() {

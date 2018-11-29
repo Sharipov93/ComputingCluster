@@ -28,6 +28,9 @@ namespace ControllerNode.View
             DataContext = _context = context;
         }
 
+        /// <summary>
+        /// Событие для проверки ввода пароля
+        /// </summary>
         private void OkBtn_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(_context.FirstIpPart) || string.IsNullOrEmpty(_context.SecondIpPart)

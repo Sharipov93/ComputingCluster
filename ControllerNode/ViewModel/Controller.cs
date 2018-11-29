@@ -23,12 +23,12 @@ namespace ControllerNode.ViewModel
             SetButtonsEndbled();
             SetInformationLog();
             SetNodesInformationLog();
-            
             LoadProtocols();
         }
 
 
         // свойства видимости кнопок контроллера
+        // кнопка добавления узла
         private bool addNodeBtnEnabled;
         public bool AddNodeBtnEnabled
         {
@@ -40,6 +40,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // кнопка удлаения узла
         private bool removeNodeBtnEnabled;
         public bool RemoveNodeBtnEnabled
         {
@@ -51,6 +52,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // кнопка запуска вычисления
         private bool startComputeBtnEnabled;
         public bool StartComputeBtnEnabled
         {
@@ -62,6 +64,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // кнопка пользовательской отмены
         private bool cancelComputeBtnEnabled;
         public bool CancelComputeBtnEnabled
         {
@@ -74,7 +77,7 @@ namespace ControllerNode.ViewModel
         }
 
 
-        // логи результата
+        // поле информации использования
         private string useInformationLog;
         public string UseInformationLog
         {
@@ -86,6 +89,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // поле, содержащее информацию об подключенныз узлах
         private string nodesInformationLog;
         public string NodesInformationLog
         {
@@ -97,6 +101,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // лог выполнения вычислений и ошибок
         private string resultInformationlog;
         public string ResultInformationlog
         {
@@ -108,6 +113,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // результат работы узлов
         private string nodeComputeOutput;
         public string NodeComputeOutput
         {
@@ -131,6 +137,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // пароль, вводимый пользователем
         private string password;
         public string Password
         {
@@ -145,13 +152,15 @@ namespace ControllerNode.ViewModel
             }
         }
 
-        // ip - адрес
+        // ip - адрес, состоит из 4 частей
         private string firstIpPart;
         public string FirstIpPart
         {
             get { return firstIpPart; }
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
+
                 int intVal = Int32.Parse(value);
                 if (intVal > 255) value = "255";
 
@@ -166,6 +175,8 @@ namespace ControllerNode.ViewModel
             get { return secondIpPart; }
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
+
                 int intVal = Int32.Parse(value);
                 if (intVal > 255) value = "255";
 
@@ -181,10 +192,11 @@ namespace ControllerNode.ViewModel
             get { return thirdIpPart; }
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
+
                 int intVal = Int32.Parse(value);
                 if (intVal > 255) value = "255";
-
-
+                
                 thirdIpPart = value;
                 NotifyPropertyChanged("ThirdIpPart");
             }
@@ -196,6 +208,8 @@ namespace ControllerNode.ViewModel
             get { return fourthIpPart; }
             set
             {
+                if (string.IsNullOrEmpty(value)) return;
+
                 int intVal = Int32.Parse(value);
                 if (intVal > 255) value = "255";
 
@@ -206,7 +220,7 @@ namespace ControllerNode.ViewModel
         }
 
 
-        // коллекция протоколов передачи данных и их загрузка
+        // коллекция протоколов передачи данных
         public ObservableCollection<Protocol> Protocols { get; set; }
         private Protocol selectedProtocol;
         public Protocol SelectedProtocol
@@ -218,7 +232,11 @@ namespace ControllerNode.ViewModel
                 NotifyPropertyChanged("SelectedProtocol");
             }
         }
+        
 
+        /// <summary>
+        /// Загрузка допустимых протоколов
+        /// </summary>
         private void LoadProtocols()
         {
             Protocols = new ObservableCollection<Protocol>
@@ -232,6 +250,7 @@ namespace ControllerNode.ViewModel
 
         // коллекция для хранения зарегестрированных узлов
         public ObservableCollection<ComputeNode> ComputeNodes { get; set; } = new ObservableCollection<ComputeNode>();
+        // выбранный узел
         private ComputeNode selectedComputeNode;
         public ComputeNode SelectedComputeNode
         {
@@ -242,8 +261,11 @@ namespace ControllerNode.ViewModel
                 NotifyPropertyChanged("SelectedComputeNode");
             }
         }
-        
-        // команда валидации ввода ip - адреса
+
+
+        /// <summary>
+        /// Команда валидации ввода ip - адреса
+        /// </summary>
         private ControllerCommand numbValidateCommand;
         public ControllerCommand NumbValidateCommand
         {
@@ -258,6 +280,7 @@ namespace ControllerNode.ViewModel
                         string currentText = validateTxtBox.Text;
                         if (string.IsNullOrEmpty(currentText)) return;
 
+                        // если введенный символ не цифра, удаляем его
                         char[] symbols = currentText.ToCharArray();
                         foreach (var s in symbols)
                             if (!char.IsDigit(s))
@@ -266,7 +289,10 @@ namespace ControllerNode.ViewModel
             }
         }
 
-        // команда запуска узлов для восстановления пароля 
+ 
+        /// <summary>
+        /// Команда запуска узлов для восстановления пароля
+        /// </summary>
         private ControllerCommand restorePasswordCommand;
         public ControllerCommand RestorePasswordCommand
         {
@@ -275,6 +301,7 @@ namespace ControllerNode.ViewModel
                 return restorePasswordCommand ??
                     (restorePasswordCommand = new ControllerCommand(obj =>
                     {
+                        // валидация введенных данных
                         if (ComputeNodes == null || ComputeNodes.Count <= 0)
                         {
                             new InformationMessageBox("Добавьте вычислительный узел").ShowDialog();
@@ -290,18 +317,25 @@ namespace ControllerNode.ViewModel
                             new InformationMessageBox($"Допустимые символы: [0 - 9], [A - Z], [a - z]").ShowDialog();
                             return;
                         }
-
+                        
+                        // генерация хэш-кода для пароля
                         Hash = BitConverter.ToString(GenerateHashPassword(Password))?.Replace("-", "")?.ToLower();
 
+                        // сохраняем запись в лог и устанавливаем видимость кнопок
                         SetResultInformationlog($"Сгенерирован хэш-код для введеного пароля [{Password}]: {Hash}");
                         SetButtonsEndbled(true);
 
+                        // запускаем метод, который будет обращаться к сервисам за подбором пароля.
+                        // метод запускается в параллельном потоке
                         var task = Task.Factory.StartNew(RestorePassword);
                     }));
             }
         }
+        
 
-        // команда пользовательской отмены восстановленя пароля
+        /// <summary>
+        /// Команда пользовательской отмены работы узлов
+        /// </summary>
         private ControllerCommand cancelPasswordCommand;
         public ControllerCommand CancelPasswordCommand
         {
@@ -313,20 +347,25 @@ namespace ControllerNode.ViewModel
                         var window = new RemoveMsgBox("Остановить восстановления пароля?");
                         if (!(bool)window.ShowDialog()) return;
 
-                        SetResultInformationlog("(!) ПОЛЬЗОВАТЕЛЬ ОТМЕНИЛ ВЫПОЛНЕНИЕ (Завершилось выполнение всех узлов)");
+                        SetResultInformationlog("(!) Пользователь отменил выполнение. Завершилось выполнение всех узлов".ToUpper());
 
                         cancelCompute();
                     }));
             }
         }
 
+
+        /// <summary>
+        /// метод останавливает работу сервисов
+        /// </summary>
         private void cancelCompute()
         {
             SetButtonsEndbled();
 
+            // если таймер запущен, останавливаем его
             if (timer != null)
                 timer.Change(Timeout.Infinite, 0);
-
+            
             if (channels == null || channels.Count <= 0) return;
             foreach (var channel in channels)
             {
@@ -334,7 +373,9 @@ namespace ControllerNode.ViewModel
                 {
                     try
                     {
-                        channel.Abort();
+                       // если канал не закрыт, отправляем сообщение сервису о прекращении работы
+                       // сообщение передается в ассинхронном виде
+                        IAsyncResult result = channel.BeginStopPasswordComputing(ar => {}, null);
                     }
                     catch { }
                 }
@@ -343,6 +384,11 @@ namespace ControllerNode.ViewModel
             channels = null;
         }
 
+
+        /// <summary>
+        /// метод генерации хэш-код пароля
+        /// </summary>
+        /// <param name="password">введенный пароль</param>
         private byte[] GenerateHashPassword(string password)
         {
             var utf8 = Encoding.UTF8;
@@ -357,7 +403,7 @@ namespace ControllerNode.ViewModel
             }
             catch (Exception e)
             {
-                MessageBox.Show($"Ошибка при хешировании пароля.\n{e.Message}");
+                MessageBox.Show($"Ошибка при хэшировании пароля.\n{e.Message}");
             }
 
             return passwordHash;
@@ -368,11 +414,10 @@ namespace ControllerNode.ViewModel
         private static int startIndex;
         private static int startSymbolsCount;
 
-        /* таймер для вывода общего времени всего процесса восстановления пароля 1 - n узлами
-           и свойство для отображения этого времени
-        */
+        // таймер для подсчета общего времени всего процесса восстановления пароля
         private Timer timer;
 
+        // свойство отображения времени
         private int allProcessTime;
         public int AllProcessTime
         {
@@ -384,10 +429,10 @@ namespace ControllerNode.ViewModel
             }
         }
 
-        // каналы данных
+        // коллекция, которая хранит каналы подключений к сервисам
         private IList<ComputeNodeService.ComputeNodeClient> channels;
 
-
+        // общее время вычислений на узлах
         private int allTime;
         public int AllNodeTime
         {
@@ -399,6 +444,7 @@ namespace ControllerNode.ViewModel
             }
         }
 
+        // общее количество вычислений на узлах
         private long countOper;
         public long AllNodeKeys
         {
@@ -410,93 +456,112 @@ namespace ControllerNode.ViewModel
             }
         }
 
+
+        /// <summary>
+        /// метод восстановления пароля
+        /// </summary>
         private void RestorePassword()
         {
             AllNodeTime = 0;
             AllNodeKeys = 0;
-
             AllProcessTime = 0;
 
             timer = new Timer(obj =>
             {
                 AllProcessTime++;
+
+                // по истечинию 30 секунд, завершаем работу сервисов и уведомляем об этом пользователя
+                if (AllProcessTime >= 30)
+                {
+                    SetResultInformationlog($"(!) Истек таймаут ({AllProcessTime}секунд). Пароль не подобран.".ToUpper());
+                    cancelCompute();
+                }
             }, null, 0, 1000);
 
+            // вычисляем кол-во элементов, которые будут распределены между узлами 
             startIndex = 0;
             startSymbolsCount = allowSymbols.Length / ComputeNodes.Count;
 
+            // коллекция каналов сервисов
             channels = new List<ComputeNodeService.ComputeNodeClient>();
+
             foreach (var node in ComputeNodes)
             {
-                //Task.Factory.StartNew(() =>
-                //{
-                    Binding binding = null;
-                    if (node.Protocol.Id == 0)
-                        binding = new BasicHttpBinding();
-                    else
-                        binding = new NetTcpBinding();
+                // создаем wcf привязку 
+                Binding binding = null;
+                if (node.Protocol.Id == 0)
+                    binding = new BasicHttpBinding();
+                else
+                    binding = new NetTcpBinding();
 
-                    var address = new EndpointAddress(node.Url);
+                // адрес хоста
+                var address = new EndpointAddress(node.Url);
 
-                    var proxy = new ComputeNodeService.ComputeNodeClient(binding, address);
-                    channels.Add(proxy);
+                // создаем канал-клиента, по которому будем обращаться к сервису и добавляем канал в коллекцию
+                var proxy = new ComputeNodeService.ComputeNodeClient(binding, address);
+                channels.Add(proxy);
 
-                    string startSymbols = allowSymbols.Substring(startIndex, startSymbolsCount);
-                    startIndex += startSymbolsCount;
-                    SetResultInformationlog($"Отправлен запрос на вычисление на узел {node.Url}: \n - Стартовый массив символов: [{startSymbols}]");
-                    
-                    try
-                    {
-                        IAsyncResult result = proxy.BeginRestorePassword(Hash, startSymbols.ToCharArray(),
-                            ar =>
+                // создаем массив стартовых символов, которые будут распределены для каждого узла
+                string startSymbols = allowSymbols.Substring(startIndex, startSymbolsCount);
+                startIndex += startSymbolsCount;
+
+                SetResultInformationlog($"Отправлен запрос на вычисление на узел {node.Url}: \n - Стартовый массив символов: [{startSymbols}]");
+
+                try
+                {
+                    // отправляем сервису хэш-код пароля и массив стартовых символов.
+                    // запрос отправляется ассинхронным образом
+                    // тут же создаем метод обратного вызова от службы
+                    IAsyncResult result = proxy.BeginRestorePassword(Hash, startSymbols.ToCharArray(),
+                        ar =>
+                        {
+                            try
                             {
-                                //Task.Factory.StartNew(() =>
-                                //{
-                                    try
+                                // получаем результат работы сервиса
+                                var computeResult = proxy.EndRestorePassword(ar);
+
+                                // уведомляем пользователя о результате работы узла
+                                SetResultInformationlog($"(!) Узел {node.Url} завершил работу: {DateTime.Now}");
+                                SetNodesComputeOutputLog(computeResult, node.Url);
+                                SetButtonsEndbled();
+
+                                // останавливаем работу таймера
+                                timer.Change(Timeout.Infinite, 0);
+
+                                // считаем общее кол-во времени работы и общее кол-во операций по подбору пароля всех узлов
+                                AllNodeTime += computeResult.OperationsLeadTime;
+                                AllNodeKeys += computeResult.OperationCount;
+
+                                // если ответ от узла положителен, т.е. сервис смог подобрать пороль, то
+                                // уведомляем остальные узлы о прекращеннии работы.
+                                if (computeResult.PasswordIsRestored)
+                                {
+                                    foreach (var c in channels)
                                     {
-                                        var computeResult = proxy.EndRestorePassword(ar);
-                                        SetResultInformationlog($"(!) Узел {node.Url} завершил работу: {DateTime.Now}");
-                                        SetNodesComputeOutputLog(computeResult, node.Url);
-                                        SetButtonsEndbled();
-                                        timer.Change(Timeout.Infinite, 0);
-
-                                        if (computeResult.PasswordIsRestored)
+                                        if (c.State != CommunicationState.Closed)
                                         {
-                                            foreach (var c in channels)
-                                            {
-                                                if (c.State != CommunicationState.Closed)
-                                                {
-                                                    var r = c.BeginStopPasswordComputing(cr =>
-                                                    {
-                                                        //var comRes = c.EndStopPasswordComputing(cr);
-                                                        //AllNodeTime += comRes.OperationsLeadTime;
-                                                        //AllNodeKeys += comRes.OperationCount;
-                                                    }, null);
-                                                }
-                                            }
-
-                                            MessageBox.Show(computeResult.RestorePassword);
-                                            //cancelCompute();
-                                            //MessageBox.Show($"time: {allTime}... operation: {countOper}");
+                                            var r = c.BeginStopPasswordComputing(cr => { }, null);
                                         }
                                     }
-                                    catch
-                                    {
 
-                                    }
-                                //});
-                            }, null);
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                //});
+                                    MessageBox.Show($"Подобранный пароль: {computeResult.RestorePassword}");
+                                }
+                            }
+                            catch { }
+
+                        }, null);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
         }
-        
-        
-        // комманда добавления нового узла
+
+
+        /// <summary>
+        /// Команда добавления нового узла
+        /// </summary>
         private ControllerCommand addNodeCommand;
         public ControllerCommand AddNodeCommand
         {
@@ -509,8 +574,10 @@ namespace ControllerNode.ViewModel
                         if (!(bool)nodeWindow.ShowDialog())
                             return;
 
+                        // Расскомментировать этот код, если нужна проверка на исключение дублирования узлов
+                        // Т.е. нельзя будет добавить 2 узла с одним и тем же ip - адресом
                         //string ip = $"{FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart}";
-                        //bool existNode = ComputeNodes != null && ComputeNodes.Where(c => 
+                        //bool existNode = ComputeNodes != null && ComputeNodes.Where(c =>
                         //    c.Ip.Contains(ip)).Count() > 0 ? true : false;
 
                         //if (existNode)
@@ -519,6 +586,7 @@ namespace ControllerNode.ViewModel
                         //    return;
                         //}
 
+                        // проверяем подключение к узлу.
                         bool connect = false;
                         try
                         {
@@ -531,14 +599,19 @@ namespace ControllerNode.ViewModel
 
                         if (!connect) return;
 
+                        // если удается подключиться добавляем узел в систему
                         AddNewComputeNode();
+
                         SetButtonsEndbled();
                         SetNodesInformationLog();
                     }));
             }
         }
-        
-        // Проверка вводимых символов пароля
+
+
+        /// <summary>
+        /// метод валидации вводимого пароля
+        /// </summary>
         private bool isValidPasswordSymbols()
         {
             bool isValid = true;
@@ -553,7 +626,10 @@ namespace ControllerNode.ViewModel
             return isValid;
         }
 
-        // команда удаления узла
+
+        /// <summary>
+        /// Команда удаления узла из приложения
+        /// </summary>
         private ControllerCommand removeNodeCommand;
         public ControllerCommand RemoveNodeCommand
         {
@@ -571,11 +647,13 @@ namespace ControllerNode.ViewModel
                         var window = new RemoveMsgBox($"Удалить узел {SelectedComputeNode.Ip}?");
                         if (!(bool)window.ShowDialog()) return;
 
+                        // если пользователь подтвердил, то удаляем узел из коллекции
                         string removeIp = SelectedComputeNode?.Ip;
                         ComputeNodes.Remove(SelectedComputeNode);
                         if (ComputeNodes != null && ComputeNodes.Count > 0)
                             SelectedComputeNode = ComputeNodes.First();
 
+                        // уведомляем пользователя об этом
                         SetButtonsEndbled();
                         SetNodesInformationLog();
                         SetResultInformationlog($"(!) Узел {removeIp} удален из списка");
@@ -583,46 +661,61 @@ namespace ControllerNode.ViewModel
             }
         }
 
-        // проверка соединения к узлу
+
+
+        /// <summary>
+        /// метод проверки подключения к службе
+        /// </summary>
         private bool CheckConnection()
         {
+            // дата подключения и url хоста
             DateTime connectStart = DateTime.Now;
             string url = $"{SelectedProtocol.ProtValue}{FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart}:{SelectedProtocol.Port}/ComputeNodeServiceLib.ComputeNodeService";
             
+            // создаем wcf привязку
             Binding binding = null;
             if (SelectedProtocol.Id == 0)
                 binding = new BasicHttpBinding();
             else
                 binding = new NetTcpBinding();
 
+            // адрес сервиса
             var address = new EndpointAddress(url);
 
+            // создаем прокси и отправляем запрос на службу. 
+            // результат подключения будет отображен в логе
             using (var proxy = new ComputeNodeService.ComputeNodeClient(binding, address))
             {
                 try
                 {
                     bool result = proxy.IsWorking();
-                    SetResultInformationlog($"[connect] Подключение к {FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart} установлено! Время подключения к узлу: { (DateTime.Now - connectStart).Milliseconds } м/сек");
+                    SetResultInformationlog($"[connect] Подключение к {FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart} установлено! Время подключения к узлу: { (DateTime.Now - connectStart).Milliseconds } миллисекунд");
                     return result;
                 }
                 catch (Exception e)
                 {
-                    SetResultInformationlog($"[disconnect] Не удалось подключиться к {FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart} в течении { (DateTime.Now - connectStart).Milliseconds } м/сек.");
+                    SetResultInformationlog($"[disconnect] Не удалось подключиться к {FirstIpPart}.{SecondIpPart}.{ThirdIpPart}.{FourthIpPart} в течении { (DateTime.Now - connectStart).Milliseconds } миллисекунд");
                     SetResultInformationlog($"[error]: {e.Message}");
                     throw;
                 }
             }
         }
 
+
         // номер узла
         private static int nodesNum = 1;
 
-        // метод добавления нового узла
+
+        /// <summary>
+        /// метод добавления нового узла
+        /// </summary>
         private void AddNewComputeNode()
         {
+            // если коллекции не существует, то создаем ее
             if (ComputeNodes == null)
                 ComputeNodes = new ObservableCollection<ComputeNode>();
 
+            // добавляем узел в коллекцию
             ComputeNodes.Add(new ComputeNode
             {
                 Id = nodesNum++,
@@ -636,7 +729,10 @@ namespace ControllerNode.ViewModel
         }
 
 
-        // настройка enabled кнопок контролера
+        /// <summary>
+        /// метод который настраивет enabled свойство кнопок приложения
+        /// </summary>
+        /// <param name="startCompute">состояние приложения. true -> выполнение</param>
         private void SetButtonsEndbled(bool startCompute = false)
         {
             bool addNodeBtn = false, removeNodeBtn = false, startComputeBtn = false;
@@ -658,21 +754,29 @@ namespace ControllerNode.ViewModel
         }
 
 
-        // вывод результата работы и др. информации
+        /// <summary>
+        /// метод информации об использованнии приложением
+        /// </summary>
         private void SetInformationLog()
         {
-            string instruction = "1. Запустите службу Windows (или консольное приложение) на необходимых компьютерах.";
-            instruction += "\n2. Для подключения к сервису, добавьте 1(+) вычислительных узлов.";
-            instruction += "\n   (При добавлении узла, укажите ip-адрес компьютера, где выполняется служба(консольное приложение) и протокол передачи данных(http, tcp))";
+            string instruction = "1. Запустите консольное приложение(КП -> выполняет роль хоста службы WCF) на необходимых компьютерах.";
+            instruction += "\n2. Для подключения к хосту, добавьте 1(+) вычислительных узлов.";
+            instruction += "\n   (При добавлении узла, укажите ip-адрес компьютера, где выполняется хост и протокол передачи данных (http, tcp))";
             instruction += "\n3. Введите пароль. (Допустимые символы: { [A - Z], [a - z], [0 - 9] })";
             instruction += "\n4. Нажмите кнопку 'Запустить'";
 
             UseInformationLog = instruction;
         }
 
+
+        /// <summary>
+        /// метод отоброжает в консоли кол-во и др. информацию об подключенных узлах
+        /// ComputeNodes -> коллекция узлов
+        /// </summary>
         private void SetNodesInformationLog()
         {
             string nodesInfo = "";
+            
             if (ComputeNodes == null || ComputeNodes.Count <= 0)
                 nodesInfo = "(!) Подключенных вычислительных узлов нет.";
             else
@@ -685,16 +789,26 @@ namespace ControllerNode.ViewModel
             NodesInformationLog = nodesInfo;
         }
 
+
+        /// <summary>
+        /// выводит в консоль информацию о ходе работы приложения
+        /// </summary>
         private void SetResultInformationlog(string message)
         {
             ResultInformationlog += $"\n{DateTime.Now}: {message}";
         }
 
+
+        /// <summary>
+        /// отображает в консоль ответ от узла.
+        /// </summary>
+        /// <param name="result">ответ полученный от сервиса</param>
+        /// <param name="node">сервис, от которого получен результат</param>
         private void SetNodesComputeOutputLog(RestorePasswordResult result, string node)
         {
             string isFounded = result.PasswordIsRestored ? "found" : "not found";
             string nodesComputeInfo = $"[{isFounded}] Результат работы узла {node}:";
-            nodesComputeInfo += $"\n - Время затраченное на подбор пароля: {result.OperationsLeadTime} м/сек";
+            nodesComputeInfo += $"\n - Время затраченное на подбор пароля: {result.OperationsLeadTime} миллисекунд";
             nodesComputeInfo += $"\n - Количество операций на подбор пароля для узла: {result.OperationCount}";
             nodesComputeInfo += $"\n - Пароль восстановлен: {result.PasswordIsRestored}";
             nodesComputeInfo += $"\n - Восстановленный пароль: {result.RestorePassword} \n\n";

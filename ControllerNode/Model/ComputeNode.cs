@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ControllerNode.Model
 {
+    /// <summary>
+    /// Класс, описывающий вычислительный узел
+    /// </summary>
     public class ComputeNode : Notifier
     {
         private int id;
@@ -19,6 +22,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // ip-адрес узла
         private string ip;
         public string Ip
         {
@@ -30,6 +34,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // url узла
         private string url;
         public string Url
         {
@@ -41,6 +46,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // протокол передачи данных
         private Protocol protocol;
         public Protocol Protocol
         {
@@ -52,6 +58,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // время подключения
         private DateTime connectionDate;
         public DateTime ConnectionDate
         {

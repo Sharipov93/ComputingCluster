@@ -110,11 +110,10 @@
                         <Run FontSize="13" Foreground="DarkGray" Text="{Binding ResultInformationlog}" />
                         <LineBreak /><LineBreak />
                         <Run FontSize="13" Foreground="#ce6d06" Text="{Binding NodeComputeOutput}" />
-                        <LineBreak /><LineBreak />
-                        <Run FontSize="14" Foreground="#3b774a">Время вычислений всех узлов: </Run>
+                        <Run FontSize="14" Foreground="#3b774a">Время вычислений узлов(миллисекунд): </Run>
                         <Run FontSize="14" Foreground="#3b774a" Text="{Binding AllNodeTime}"></Run>
-                        <LineBreak />
-                        <Run FontSize="14" Foreground="#3b774a">Количество вычислений всех узлов: </Run>
+                        <Run FontSize="14" Text="   "/>   
+                        <Run FontSize="14" Foreground="#3b774a">Количество вычислений узлов: </Run>
                         <Run FontSize="14" Foreground="#3b774a" Text="{Binding AllNodeKeys}"></Run>
                     </TextBlock>
                 </StackPanel>

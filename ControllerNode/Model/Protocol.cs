@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ControllerNode.Model
 {
+    /// <summary>
+    /// Класс, описывающий протокол передачи данных
+    /// </summary>
     public class Protocol : Notifier
     {
         private int id;
@@ -20,6 +23,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // имя протокола для отображения
         private string name;
         public string Name
         {
@@ -31,6 +35,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // значение протокола -> http:// или tcp://
         private string protValue;
         public string ProtValue
         {
@@ -42,6 +47,7 @@ namespace ControllerNode.Model
             }
         }
 
+        // порт
         private int port;
         public int Port
         {

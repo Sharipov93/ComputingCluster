@@ -29,18 +29,6 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetComputeInformation">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="GetComputeInformationResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/ComputeNodeServiceLib" minOccurs="0" name="GetComputeInformationResult" nillable="true" type="q3:RestorePasswordResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="StopPasswordComputing">
     <xs:complexType>
       <xs:sequence />

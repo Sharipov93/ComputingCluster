@@ -10,13 +10,13 @@ namespace ComputeNodeServiceLib
 {
     public class ComputeNodeService : IComputeNode
     {
-        // проверка работы коммуникационного узла
+        // проверка работы сервиса
         public bool IsWorking() => true;
         
-        // хэш пароля, высылаемый службе и результат найденного пароля
+        // поля хранящие хэш пароля и пароль если он подобран
         private string hash, resultPassword;
 
-        // Время начала подбара на узле
+        // время начала подбора пароля
         private static DateTime startTime;
 
         // флаг показывающай найден ли пароль
@@ -25,16 +25,18 @@ namespace ComputeNodeServiceLib
 
         // Длина массива startSymbolsRange для повышения производительности
         private int startSymbolsRangeLength = 0;
+
+        // количество операций по подбору пароля
         private static long computedKeys;
 
-        // Пересылаемый массив содержаищий символы, по которым будет подбираться пароль
+        // пересылаемый массив содержаищий символы, по которым будет подбираться пароль
         private char[] charactersToRestorePass;
 
 
         /// <summary>
         /// Основной метод сервиса, к этому методу будут обращаться удаленные клиенты
         /// </summary>
-        /// <param name="passwordHash">Хэш пароля</param>
+        /// <param name="passwordHash">хэш пароля</param>
         /// <param name="startSymbolsRange">стартовый массив символов</param>
         public RestorePasswordResult RestorePassword(string passwordHash, char[] startSymbolsRange)
         {
@@ -59,6 +61,7 @@ namespace ComputeNodeServiceLib
                 startBruteForce(estimatedPasswordLength);
             }
 
+            // результат работы сервиса
             return new RestorePasswordResult
             {
                 OperationCount = computedKeys,
@@ -71,7 +74,7 @@ namespace ComputeNodeServiceLib
 
 
         /// <summary>
-        /// Рекурсивный метод для подбора возможный значений
+        /// Рекурсивный метод для подбора возможных значений
         /// </summary>
         /// <param name="keyLength">Длина ключа</param>
         private void startBruteForce(int keyLength)
@@ -95,7 +98,7 @@ namespace ComputeNodeServiceLib
 
 
         /// <summary>
-        /// Основной метод подбора пароля, он создает новые ключи, генрирует для них хэш и проверяет с отправленным хэшом пароля
+        /// метод подбора пароля, создает новые ключи, генрирует для них хэш и проверяет с отправленным хэшом пароля
         /// до тех пор пока не найдет парель либо не осущиствит перебер через весь массив символов
         /// </summary>
         /// <param name="currentCharPosition">Позиция символа, который заменятся новым</param>
@@ -106,6 +109,7 @@ namespace ComputeNodeServiceLib
         private void createNewKey(int currentCharPosition, char[] keyChars, int keyLength, int indexOfLastChar)
         {
             var nextCharPosition = currentCharPosition + 1;
+
             // Перебираем через весь наш массив стартовых символов charactersToRestorePass
             for (int i = 0; i < startSymbolsRangeLength; i++)
             {
@@ -171,16 +175,11 @@ namespace ComputeNodeServiceLib
             return passwordHash;
         }
 
+        /// <summary>
+        /// Метод, вызываемый клиентом, если нужно прекратить работу сервиса по побору пароля.
+        /// Например если найден пароль или пользователь решил отменить выполнение
+        /// </summary>
         public bool StopPasswordComputing() => isMatched = true;
-
-
-        public RestorePasswordResult GetComputeInformation()
-        {
-            return new RestorePasswordResult
-            {
-                OperationCount = computedKeys,
-                OperationsLeadTime = (DateTime.Now - startTime).Milliseconds
-            };
-        }
+        
     }
 }

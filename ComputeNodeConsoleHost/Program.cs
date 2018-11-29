@@ -10,6 +10,9 @@ namespace ComputeNodeConsoleHost
 {
     class Program
     {
+        /// <summary>
+        /// Запускаем WCF службу
+        /// </summary>
         static void Main(string[] args)
         {
             Console.WriteLine("*** Console host ***");
